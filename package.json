@@ -1,10 +1,32 @@
 {
   "name": "copy-branch-name",
   "displayName": "copy-branch-name",
-  "description": "",
+  "description": "Extension to copy the current branch name",
+  "publisher": "PKief",
+  "author": {
+    "name": "Philipp Kief",
+    "email": "philipp.kief@gmx.de",
+    "url": "https://pkief.github.io"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.69.0"
+  },
+  "keywords": [
+    "git",
+    "branch"
+  ],
+  "funding": "https://github.com/sponsors/PKief",
+  "sponsor": {
+    "url": "https://github.com/sponsors/PKief"
+  },
+  "homepage": "https://github.com/PKief/vscode-extension-copy-branch-name/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PKief/vscode-extension-copy-branch-name.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PKief/vscode-extension-copy-branch-name/issues"
   },
   "categories": [
     "Other"
