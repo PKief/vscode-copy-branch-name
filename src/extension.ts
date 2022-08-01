@@ -1,30 +1,30 @@
-import clipboard from "clipboardy";
-import * as vscode from "vscode";
-import { GitExtension } from "./@types/vscode.git";
+import clipboard from 'clipboardy';
+import * as vscode from 'vscode';
+import { GitExtension } from './@types/vscode.git';
 
 export const activate = (context: vscode.ExtensionContext) => {
   const copyButton = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
-    1
+    9999
   );
-  copyButton.text = "$(copy)";
-  copyButton.tooltip = "Copy current branch name";
+  copyButton.text = '$(copy)';
+  copyButton.tooltip = 'Copy current branch name';
   copyButton.accessibilityInformation = {
-    label: "Click this button to copy the current branch name",
+    label: 'Click this button to copy the current branch name',
   };
-  copyButton.command = "copy-branch-name.copy-current";
+  copyButton.command = 'copy-branch-name.copy-current';
   copyButton.show();
 
   const disposable = vscode.commands.registerCommand(
-    "copy-branch-name.copy-current",
+    'copy-branch-name.copy-current',
     () => {
       const gitExtension =
-        vscode.extensions.getExtension<GitExtension>("vscode.git")?.exports;
+        vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
       if (gitExtension) {
         const api = gitExtension.getAPI(1);
 
         const repo = api.repositories[0];
-        const branchName = (repo.state.HEAD && repo.state.HEAD.name) || "";
+        const branchName = (repo.state.HEAD && repo.state.HEAD.name) || '';
         clipboard.writeSync(branchName);
       }
     }
