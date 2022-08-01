@@ -1,6 +1,6 @@
 {
   "name": "copy-branch-name",
-  "displayName": "copy-branch-name",
+  "displayName": "Copy Branch Name",
   "description": "Extension to copy the current branch name",
   "publisher": "PKief",
   "author": {
