@@ -16,6 +16,11 @@
     "git",
     "branch"
   ],
+  "icon": "logo.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
   "funding": "https://github.com/sponsors/PKief",
   "sponsor": {
     "url": "https://github.com/sponsors/PKief"
