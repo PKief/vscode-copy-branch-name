@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-    <img src="./logo.png" alt="logo" width="200">
+    <img src="https://raw.githubusercontent.com/PKief/vscode-copy-branch-name/main/logo.png" alt="Extension logo" width="200">
   <br><br>
   VS Code - Copy Branch Name
   <br>
@@ -22,12 +22,12 @@
 
 After installing this extension you will find a new icon in the status bar. As soon as you click on it, it will be copied to your clipboard so that you can paste it somewhere else in your workflow.
 
-<img src="./images/explanation.png" alt="Explanation">
+<img src="https://raw.githubusercontent.com/PKief/vscode-copy-branch-name/main/images/explanation.png" alt="Explanation">
 
 ### Command palette
 
 In addition, it's also possible to run the copy command via VS Code command palette. The command is called `Copy current branch name`.
 
-<img src="./images/command-palette.png" alt="Explanation">
+<img src="https://raw.githubusercontent.com/PKief/vscode-copy-branch-name/main/images/command-palette.png" alt="Command palette">
 
 If the name of the branch was successfully copied to the clipboard, a message text appears in the status bar for a few seconds.
