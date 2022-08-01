@@ -2,6 +2,8 @@ import clipboard from 'clipboardy';
 import * as vscode from 'vscode';
 import { GitExtension } from './@types/vscode.git';
 
+let currentStatusBarMessageTimeout: NodeJS.Timeout;
+
 export const activate = (context: vscode.ExtensionContext) => {
   showStatusBarButton();
 
@@ -28,6 +30,8 @@ const showStatusBarButton = () => {
 };
 
 const copyCurrentBranchNameCommand = () => {
+  clearTimeout(currentStatusBarMessageTimeout);
+
   const gitExtension =
     vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
   if (gitExtension) {
@@ -37,7 +41,16 @@ const copyCurrentBranchNameCommand = () => {
     const branchName = (repo.state.HEAD && repo.state.HEAD.name) || '';
     clipboard.writeSync(branchName);
 
-    vscode.window.showInformationMessage('Copied to clipboard');
+    vscode.window.setStatusBarMessage(`Copied ${branchName} to clipboard`);
+    const timeout = setTimeout(() => {
+      vscode.window.setStatusBarMessage('');
+    }, 5000);
+
+    currentStatusBarMessageTimeout = timeout;
+  } else {
+    vscode.window.showErrorMessage(
+      'Could not copy current Git branch name to clipboard. The VS Code Git extension could not be found.'
+    );
   }
 };
 
