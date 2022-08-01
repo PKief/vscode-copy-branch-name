@@ -5,13 +5,17 @@ import { GitExtension } from "./@types/vscode.git";
 export const activate = (context: vscode.ExtensionContext) => {
   const copyButton = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
-    99999
+    1
   );
-  copyButton.text = "Copy current branch";
+  copyButton.text = "$(copy)";
+  copyButton.tooltip = "Copy current branch name";
+  copyButton.accessibilityInformation = {
+    label: "Click this button to copy the current branch name",
+  };
   copyButton.command = "copy-branch-name.copy-current";
   copyButton.show();
 
-  let disposable = vscode.commands.registerCommand(
+  const disposable = vscode.commands.registerCommand(
     "copy-branch-name.copy-current",
     () => {
       const gitExtension =
