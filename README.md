@@ -20,7 +20,7 @@
 
 ### Status Bar
 
-After installing this extension you will find a new icon in the status bar. As soon as you click on it, it will be copied to your clipboard so that you can paste it somewhere else in your workflow.
+After installing this extension you will find a new icon in the status bar. As soon as you click on it, the current branch name will be copied to your clipboard so that you can paste it somewhere else in your workflow.
 
 <img src="https://raw.githubusercontent.com/PKief/vscode-copy-branch-name/main/images/explanation.png" alt="Explanation">
 
