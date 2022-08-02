@@ -60,7 +60,9 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "changelog": "changelog-machine --config changelog.config.json",
+    "version": "npm run changelog && git add CHANGELOG.md"
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",
@@ -70,6 +72,7 @@
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
     "@vscode/test-electron": "^2.1.5",
+    "changelog-machine": "^1.0.2",
     "eslint": "^8.20.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
