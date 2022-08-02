@@ -8,7 +8,7 @@
     "email": "philipp.kief@gmx.de",
     "url": "https://pkief.github.io"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.69.0"
   },
