@@ -8,7 +8,7 @@ import { copyCurrentBranchNameCommand } from '../../commands';
 const testBranchName = 'my-branch';
 const mockGitExtension = {
   exports: {
-    getAPI: (version: number) => ({
+    getAPI: (_version: number) => ({
       repositories: [
         {
           state: {
