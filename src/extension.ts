@@ -1,55 +1,30 @@
 import * as vscode from 'vscode';
-import { GitExtension } from './@types/vscode.git';
+import { copyCurrentBranchNameCommand } from './commands';
+import { showStatusBarButton } from './utils/statusbar';
 
-let currentStatusBarMessageTimeout: NodeJS.Timeout;
+const commands: { id: string; callback: () => void }[] = [
+  { id: 'copy-current', callback: copyCurrentBranchNameCommand },
+];
 
 export const activate = (context: vscode.ExtensionContext) => {
-  showStatusBarButton();
+  const extensionId = context.extension.id;
+  showStatusBarButton({
+    alignment: vscode.StatusBarAlignment.Left,
+    priority: 9999,
+    text: '$(copy)',
+    tooltip: 'Copy current branch name',
+    accessibilityInformation:
+      'Click this button to copy the current branch name',
+    command: `${extensionId}.copy-current`,
+    visible: true,
+  });
 
-  const disposable = vscode.commands.registerCommand(
-    'copy-branch-name.copy-current',
-    copyCurrentBranchNameCommand
-  );
-
-  context.subscriptions.push(disposable);
-};
-
-const showStatusBarButton = () => {
-  const copyButton = vscode.window.createStatusBarItem(
-    vscode.StatusBarAlignment.Left,
-    9999
-  );
-  copyButton.text = '$(copy)';
-  copyButton.tooltip = 'Copy current branch name';
-  copyButton.accessibilityInformation = {
-    label: 'Click this button to copy the current branch name',
-  };
-  copyButton.command = 'copy-branch-name.copy-current';
-  copyButton.show();
-};
-
-const copyCurrentBranchNameCommand = () => {
-  clearTimeout(currentStatusBarMessageTimeout);
-
-  const gitExtension =
-    vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
-  if (gitExtension) {
-    const api = gitExtension.getAPI(1);
-
-    const repo = api.repositories[0];
-    const branchName = (repo.state.HEAD && repo.state.HEAD.name) || '';
-    vscode.env.clipboard.writeText(branchName);
-    vscode.window.setStatusBarMessage(`Copied ${branchName} to clipboard`);
-    const timeout = setTimeout(() => {
-      vscode.window.setStatusBarMessage('');
-    }, 5000);
-
-    currentStatusBarMessageTimeout = timeout;
-  } else {
-    vscode.window.showErrorMessage(
-      'Could not copy current Git branch name to clipboard. The VS Code Git extension could not be found.'
+  commands.forEach((command) => {
+    const disposable = vscode.commands.registerCommand(
+      `${extensionId}.${command.id}`,
+      command.callback
     );
-  }
-};
 
-export const deactivate = () => {};
+    context.subscriptions.push(disposable);
+  });
+};
