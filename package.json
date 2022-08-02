@@ -25,13 +25,13 @@
   "sponsor": {
     "url": "https://github.com/sponsors/PKief"
   },
-  "homepage": "https://github.com/PKief/vscode-extension-copy-branch-name/blob/main/README.md",
+  "homepage": "https://github.com/PKief/vscode-copy-branch-name/blob/main/README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/PKief/vscode-extension-copy-branch-name.git"
+    "url": "https://github.com/PKief/vscode-copy-branch-name.git"
   },
   "bugs": {
-    "url": "https://github.com/PKief/vscode-extension-copy-branch-name/issues"
+    "url": "https://github.com/PKief/vscode-copy-branch-name/issues"
   },
   "categories": [
     "Other"
