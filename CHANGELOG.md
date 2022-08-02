@@ -1,9 +1,4 @@
-# Change Log
+### Changelog 
 
-All notable changes to the "copy-branch-name" extension will be documented in this file.
+ All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
