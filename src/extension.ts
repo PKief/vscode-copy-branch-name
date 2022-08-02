@@ -1,4 +1,3 @@
-import * as copy from 'copy-to-clipboard';
 import * as vscode from 'vscode';
 import { GitExtension } from './@types/vscode.git';
 
@@ -39,12 +38,7 @@ const copyCurrentBranchNameCommand = () => {
 
     const repo = api.repositories[0];
     const branchName = (repo.state.HEAD && repo.state.HEAD.name) || '';
-    try {
-      copy(branchName);
-    } catch (error) {
-      console.error(error);
-    }
-
+    vscode.env.clipboard.writeText(branchName);
     vscode.window.setStatusBarMessage(`Copied ${branchName} to clipboard`);
     const timeout = setTimeout(() => {
       vscode.window.setStatusBarMessage('');
