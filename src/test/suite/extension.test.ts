@@ -1,15 +1,54 @@
 import * as assert from 'assert';
-
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
+import { afterEach, beforeEach } from 'mocha';
+import { createSandbox, SinonSandbox } from 'sinon';
 import * as vscode from 'vscode';
-// import * as myExtension from '../../extension';
+import { GitExtension, Repository } from '../../@types/vscode.git';
+import { copyCurrentBranchNameCommand } from '../../commands';
 
-suite('Extension Test Suite', () => {
-	vscode.window.showInformationMessage('Start all tests.');
+const testBranchName = 'my-branch';
+const mockGitExtension = {
+  exports: {
+    getAPI: (version: number) => ({
+      repositories: [
+        {
+          state: {
+            HEAD: {
+              name: testBranchName,
+            },
+          },
+        },
+      ] as Repository[],
+    }),
+  },
+} as vscode.Extension<GitExtension>;
 
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
-	});
+describe('Extension Test Suite', () => {
+  let sandbox: SinonSandbox;
+  vscode.window.showInformationMessage('Start all tests.');
+
+  beforeEach(() => {
+    sandbox = createSandbox();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('Should throw error if Git extension is not available', async () => {
+    sandbox.stub(vscode.extensions, 'getExtension').returns({
+      exports: {},
+    } as vscode.Extension<unknown>);
+
+    assert.rejects(async () => {
+      await copyCurrentBranchNameCommand();
+    });
+  });
+
+  it('Should copy branch name to clipboard', async () => {
+    sandbox.stub(vscode.extensions, 'getExtension').returns(mockGitExtension);
+
+    await copyCurrentBranchNameCommand();
+    const result = await vscode.env.clipboard.readText();
+    assert.equal(result, testBranchName);
+  });
 });
