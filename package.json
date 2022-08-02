@@ -80,6 +80,6 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "clipboardy": "^3.0.0"
+    "copy-to-clipboard": "^3.3.1"
   }
 }
