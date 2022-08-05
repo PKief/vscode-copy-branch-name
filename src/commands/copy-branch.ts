@@ -1,14 +1,10 @@
 import * as vscode from 'vscode';
-import { GitExtension } from '../@types/vscode.git';
+import { getGitRepository } from '../utils/git';
 import { showToastInStatusBar } from '../utils/statusbar';
 
 export const copyCurrentBranchNameCommand = async () => {
-  const gitExtension =
-    vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
-  if (gitExtension) {
-    const api = gitExtension.getAPI(1);
-
-    const repo = api.repositories[0];
+  const repo = getGitRepository();
+  if (repo) {
     const branchName = (repo.state.HEAD && repo.state.HEAD.name) || '';
     try {
       await vscode.env.clipboard.writeText(branchName);

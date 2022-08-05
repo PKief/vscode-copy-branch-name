@@ -44,7 +44,10 @@
     "commands": [
       {
         "command": "copy-branch-name.copy-current",
-        "title": "Copy current branch name"
+        "title": "Copy current branch name",
+        "icon": "$(copy)",
+        "enablement": "gitOpenRepositoryCount >= 1",
+        "shortTitle": "Copy current branch name"
       }
     ]
   },
