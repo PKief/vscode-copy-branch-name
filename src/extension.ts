@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { copyCurrentBranchNameCommand } from './commands';
+import { getGitRepository } from './utils/git';
 import { showStatusBarButton } from './utils/statusbar';
 
 const commands: { id: string; callback: () => void }[] = [
@@ -7,7 +8,15 @@ const commands: { id: string; callback: () => void }[] = [
 ];
 
 export const activate = (context: vscode.ExtensionContext) => {
-  const extensionId = context.extension.id;
+  const extensionId = context.extension.packageJSON.name;
+  registerCommands(extensionId, context);
+
+  const isGitAvailable = !!getGitRepository();
+
+  if (!isGitAvailable) {
+    return;
+  }
+
   showStatusBarButton({
     alignment: vscode.StatusBarAlignment.Left,
     priority: 9999,
@@ -18,7 +27,12 @@ export const activate = (context: vscode.ExtensionContext) => {
     command: `${extensionId}.copy-current`,
     visible: true,
   });
+};
 
+const registerCommands = (
+  extensionId: any,
+  context: vscode.ExtensionContext
+) => {
   commands.forEach((command) => {
     const disposable = vscode.commands.registerCommand(
       `${extensionId}.${command.id}`,
