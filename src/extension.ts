@@ -23,15 +23,15 @@ export const activate = (context: vscode.ExtensionContext) => {
 };
 
 const registerCommands = (
-  extensionId: any,
+  extensionId: string,
   context: vscode.ExtensionContext
 ) => {
-  commands.forEach((command) => {
+  for (const command of commands) {
     const disposable = vscode.commands.registerCommand(
       `${extensionId}.${command.id}`,
       command.callback
     );
 
     context.subscriptions.push(disposable);
-  });
+  }
 };

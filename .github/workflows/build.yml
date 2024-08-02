@@ -4,29 +4,29 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-        node-version: [16.x]
+    runs-on: ubuntu-latest
 
-    name: ${{ matrix.os }} (Node.js ${{ matrix.node-version }})
+    name: Build + Test
 
     steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@v2
-      - name: Setup Node.js ${{ matrix.node-version }} ⚙
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '20'
+
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+      
       - name: Run display server 🖥
         run: /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & echo "Started xvfb"
         shell: bash
-        if: ${{ success() && matrix.os == 'ubuntu-latest' }}
+        if: ${{ success() }}
+
       - name: Install node_modules 📦
         run: npm ci
+
       - name: Cache node_modules 💾
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: cache-node-modules
         with:
@@ -37,9 +37,11 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
       - name: Test + Build 🚀
         run: |
           npm test
+          npm run lint
           npm run vscode:prepublish
         env:
           DISPLAY: ':99.0'

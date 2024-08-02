@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { GitExtension } from '../@types/vscode.git';
+import { GitExtension } from '../types/git';
 
 export const getGitRepository = () => {
   const gitExtension =

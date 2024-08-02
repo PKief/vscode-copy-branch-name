@@ -1,9 +1,9 @@
 import * as assert from 'assert';
 import { afterEach, beforeEach } from 'mocha';
-import { createSandbox, SinonSandbox } from 'sinon';
+import { SinonSandbox, createSandbox } from 'sinon';
 import * as vscode from 'vscode';
-import { GitExtension, Repository } from '../../@types/vscode.git';
 import { copyCurrentBranchNameCommand } from '../../commands';
+import { GitExtension, GitRepository } from '../../types/git';
 
 const testBranchName = 'my-branch';
 const mockGitExtension = {
@@ -12,12 +12,13 @@ const mockGitExtension = {
       repositories: [
         {
           state: {
+            // biome-ignore lint/style/useNamingConvention: Given by the Git API
             HEAD: {
               name: testBranchName,
             },
           },
         },
-      ] as Repository[],
+      ] as GitRepository[],
     }),
   },
 } as vscode.Extension<GitExtension>;
