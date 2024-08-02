@@ -17,7 +17,7 @@ export const copyCurrentBranchNameCommand = async () => {
     }
   } else {
     const errorMessage =
-      'Could not find current branch name. Reason: The VS Code Git extension could not be found.';
+      'Could not find current branch name. The extension could not read the Git repository of the current workspace.';
     vscode.window.showErrorMessage(errorMessage);
     throw new Error(errorMessage);
   }
