@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { copyCurrentBranchNameCommand } from './commands';
-import { getGitRepository } from './utils/git';
 import { showStatusBarButton } from './utils/statusbar';
 
 const commands: { id: string; callback: () => void }[] = [
@@ -10,12 +9,6 @@ const commands: { id: string; callback: () => void }[] = [
 export const activate = (context: vscode.ExtensionContext) => {
   const extensionId = context.extension.packageJSON.name;
   registerCommands(extensionId, context);
-
-  const isGitAvailable = !!getGitRepository();
-
-  if (!isGitAvailable) {
-    return;
-  }
 
   showStatusBarButton({
     alignment: vscode.StatusBarAlignment.Left,
