@@ -3,6 +3,13 @@
  All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
  
+#### [v1.0.4](https://github.com/PKief/vscode-copy-branch-name/compare/v1.0.3...v1.0.4) 
+
+> August 2, 2024 
+
+- Update project dependencies and tooling [`72ae9f5`](https://github.com/PKief/vscode-copy-branch-name/commit/72ae9f5)
+- Improve status bar button [`#6`](https://github.com/PKief/vscode-copy-branch-name/pull/6)
+ 
 #### [v1.0.3](https://github.com/PKief/vscode-copy-branch-name/compare/v1.0.2...v1.0.3) 
 
 > February 27, 2023 

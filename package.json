@@ -8,11 +8,14 @@
     "email": "philipp.kief@gmx.de",
     "url": "https://pkief.github.io"
   },
-  "version": "1.0.3",
+  "version": "1.0.4",
   "engines": {
     "vscode": "^1.69.0"
   },
-  "keywords": ["git", "branch"],
+  "keywords": [
+    "git",
+    "branch"
+  ],
   "icon": "logo.png",
   "galleryBanner": {
     "color": "#1e1e1e",
@@ -30,8 +33,12 @@
   "bugs": {
     "url": "https://github.com/PKief/vscode-copy-branch-name/issues"
   },
-  "categories": ["Other"],
-  "activationEvents": ["onStartupFinished"],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -44,7 +51,9 @@
       }
     ]
   },
-  "extensionDependencies": ["vscode.git"],
+  "extensionDependencies": [
+    "vscode.git"
+  ],
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
