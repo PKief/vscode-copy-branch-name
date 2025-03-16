@@ -1,0 +1,9 @@
+[test]
+# Load these modules before running tests.
+preload = ["./src/tests/mocks"]
+coverage = true
+coverageSkipTestFiles = true
+coverageReporter  = ["text", "lcov"]
+
+[install]
+saveTextLockfile = true
