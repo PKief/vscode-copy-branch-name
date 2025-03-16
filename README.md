@@ -31,3 +31,7 @@ In addition, it's also possible to run the copy command via VS Code command pale
 <img src="https://raw.githubusercontent.com/PKief/vscode-copy-branch-name/main/images/command-palette.png" alt="Command palette">
 
 If the name of the branch was successfully copied to the clipboard, a message text appears in the status bar for a few seconds.
+
+## Multiple Repositories Support
+
+This extension also supports multiple repositories. It copies the branch name of the repository in which the currently opened and active file is located. This ensures that you always get the correct branch name depending on the repository of the active file.
