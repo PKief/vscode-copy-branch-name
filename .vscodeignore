@@ -14,7 +14,7 @@
 !package.nls.*.json
 
 # Extension code
-!dist/extension
+!dist
 
 # Exclude everything else
 **/*
