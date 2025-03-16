@@ -6,16 +6,13 @@
   "author": {
     "name": "Philipp Kief",
     "email": "philipp.kief@gmx.de",
-    "url": "https://pkief.github.io"
+    "url": "https://pkief.com"
   },
   "version": "1.0.4",
   "engines": {
     "vscode": "^1.69.0"
   },
-  "keywords": [
-    "git",
-    "branch"
-  ],
+  "keywords": ["git", "branch"],
   "icon": "logo.png",
   "galleryBanner": {
     "color": "#1e1e1e",
@@ -33,13 +30,9 @@
   "bugs": {
     "url": "https://github.com/PKief/vscode-copy-branch-name/issues"
   },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onStartupFinished"
-  ],
-  "main": "./dist/extension.js",
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./dist/extension.cjs",
   "contributes": {
     "commands": [
       {
@@ -51,37 +44,31 @@
       }
     ]
   },
-  "extensionDependencies": [
-    "vscode.git"
-  ],
+  "extensionDependencies": ["vscode.git"],
   "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "lint": "npx @biomejs/biome check --write ./src",
-    "format": "npx @biomejs/biome format --write ./src",
-    "test": "node ./out/test/runTest.js",
-    "changelog": "changelog-machine --config changelog.config.json",
-    "version": "npm run changelog && git add CHANGELOG.md"
+    "vscode:prepublish": "bun run build",
+    "prebuild": "tsc -p ./",
+    "build": "bun ./build/build-with-esbuild.ts",
+    "build:watch": "bun ./build/watch-with-esbuild.ts",
+    "test": "bun test",
+    "test:snapshot": "bun test --update-snapshots",
+    "test:debug": "bun test --inspect-wait",
+    "lint": "biome check ./src",
+    "format": "biome format --write ./src",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@commitlint/config-conventional": "^19.8.0",
     "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.7",
-    "@types/node": "22.x",
-    "@types/sinon": "^17.0.3",
     "@types/vscode": "^1.69.0",
-    "@vscode/test-electron": "^2.4.1",
-    "changelog-machine": "^1.1.0",
+    "bun-types": "^1.2.5",
+    "changelogen": "^0.6.1",
+    "commitlint": "^19.8.0",
+    "esbuild": "^0.25.1",
     "glob": "^11.0.0",
-    "mocha": "^10.7.0",
-    "sinon": "^18.0.0",
+    "husky": "^9.1.7",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.5.4",
-    "webpack": "^5.93.0",
-    "webpack-cli": "^5.1.4"
+    "typescript": "^5.8.2"
   }
 }

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-let currentStatusBarMessageTimeout: NodeJS.Timeout;
+let currentStatusBarMessageTimeout: Timer;
 
 export type StatusBarButtonConfig = {
   alignment: vscode.StatusBarAlignment;
@@ -32,13 +32,14 @@ export const showStatusBarButton = (config: StatusBarButtonConfig) => {
 /**
  * Show a message in the status bar for a short time
  * @param message Message of the toast
+ * @param milliseconds Time in milliseconds to show the toast
  */
-export const showToastInStatusBar = (message: string, seconds = 5000) => {
+export const showToastInStatusBar = (message: string, milliseconds = 5000) => {
   resetStatusBarToastTimeout();
   vscode.window.setStatusBarMessage(message);
   currentStatusBarMessageTimeout = setTimeout(() => {
     vscode.window.setStatusBarMessage('');
-  }, seconds);
+  }, milliseconds);
 };
 
 const resetStatusBarToastTimeout = () => {
