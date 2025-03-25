@@ -1,4 +1,20 @@
 # Changelog
+## v1.1.0
+
+[compare changes](https://github.com/PKief/vscode-copy-branch-name/compare/v1.0.5...v1.1.0)
+
+### 🚀 Enhancements
+
+- Copy branch name even if no active file is selected ([#10](https://github.com/PKief/vscode-copy-branch-name/pull/10))
+
+### 🩹 Fixes
+
+- **ci:** Pr title workflow should be executed on updates ([ca8e4ee](https://github.com/PKief/vscode-copy-branch-name/commit/ca8e4ee))
+
+### ❤️ Contributors
+
+- Philipp Kief ([@PKief](https://github.com/PKief))
+
 ## v1.0.5
 
 [compare changes](https://github.com/PKief/vscode-copy-branch-name/compare/v1.0.4...v1.0.5)
