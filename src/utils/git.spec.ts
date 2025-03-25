@@ -7,9 +7,8 @@ import {
   it,
   jest,
   mock,
-  spyOn,
 } from 'bun:test';
-import { type Extension, window } from 'vscode';
+import { type Extension } from 'vscode';
 import type { GitExtension, GitRepository } from '../types/git';
 import { getGitRepository } from './git';
 
@@ -22,6 +21,7 @@ describe('getGitRepository', () => {
     getExtensionMock = mock(() => ({
       exports: {
         getAPI: mock(() => ({
+          repositories: [],
           getRepository: mock(() => ({
             rootUri: { path: '' },
             // biome-ignore lint/style/useNamingConvention: Given by the Git API
@@ -62,13 +62,7 @@ describe('getGitRepository', () => {
     expect(getExtensionMock).toMatchSnapshot();
   });
 
-  it('should return null if no active text editor is found', () => {
-    spyOn(window, 'activeTextEditor').mockReturnValue(null as never);
-    const repo = getGitRepository();
-    expect(repo).toBeNull();
-  });
-
-  it('should return the repository if active text editor and git extension are found', () => {
+  it('should return the repository from the active text editor if found', () => {
     const expectedRepository = {
       rootUri: { path: '' },
       // biome-ignore lint/style/useNamingConvention: Given by the Git API
@@ -76,5 +70,57 @@ describe('getGitRepository', () => {
     } as GitRepository;
     const repo = getGitRepository();
     expect(repo).toStrictEqual(expectedRepository);
+  });
+
+  it('should return the repository from the extensionApi.repositories if no active text editor is found', () => {
+    const expectedRepository = {
+      rootUri: { path: '' },
+      // biome-ignore lint/style/useNamingConvention: Given by the Git API
+      state: { HEAD: { name: 'main' } },
+    } as GitRepository;
+
+    getExtensionMock = mock(() => ({
+      exports: {
+        getAPI: mock(() => ({
+          repositories: [expectedRepository],
+          getRepository: mock(() => null),
+        })),
+      },
+    }));
+
+    mock.module('vscode', () => ({
+      extensions: {
+        getExtension: getExtensionMock,
+      },
+      window: {
+        activeTextEditor: null,
+      },
+    }));
+
+    const repo = getGitRepository();
+    expect(repo).toStrictEqual(expectedRepository);
+  });
+
+  it('should return null if no active text editor and no repository with an active branch is found', () => {
+    getExtensionMock = mock(() => ({
+      exports: {
+        getAPI: mock(() => ({
+          repositories: [],
+          getRepository: mock(() => null),
+        })),
+      },
+    }));
+
+    mock.module('vscode', () => ({
+      extensions: {
+        getExtension: getExtensionMock,
+      },
+      window: {
+        activeTextEditor: null,
+      },
+    }));
+
+    const repo = getGitRepository();
+    expect(repo).toBeNull();
   });
 });

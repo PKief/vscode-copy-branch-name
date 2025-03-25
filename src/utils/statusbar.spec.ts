@@ -70,8 +70,6 @@ describe('statusbar', () => {
 
       showToastInStatusBar(message, milliseconds);
 
-      console.log(vscode.window);
-
       expect(vscode.window.setStatusBarMessage).toHaveBeenCalledWith(message);
       await sleep(milliseconds);
       expect(vscode.window.setStatusBarMessage).toHaveBeenCalledTimes(2);

@@ -1,6 +1,7 @@
 import { Uri } from 'vscode';
 
 export type GitExtensionApi = {
+  repositories: GitRepository[];
   getRepository(uri: Uri): GitRepository | null;
 };
 
