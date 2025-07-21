@@ -67,17 +67,17 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@commitlint/config-conventional": "^19.8.0",
-    "@types/glob": "^8.1.0",
-    "@types/vscode": "^1.69.0",
-    "bun-types": "^1.2.5",
-    "changelogen": "^0.6.1",
-    "commitlint": "^19.8.0",
-    "esbuild": "^0.25.1",
-    "glob": "^11.0.0",
+    "@biomejs/biome": "^2.1.2",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@types/glob": "^9.0.0",
+    "@types/vscode": "^1.102.0",
+    "bun-types": "^1.2.19",
+    "changelogen": "^0.6.2",
+    "commitlint": "^19.8.1",
+    "esbuild": "^0.25.8",
+    "glob": "^11.0.3",
     "husky": "^9.1.7",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.8.2"
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3"
   }
 }

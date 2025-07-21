@@ -1,11 +1,11 @@
 import {
-  type Mock,
   afterAll,
   beforeEach,
   describe,
   expect,
   it,
   jest,
+  type Mock,
   mock,
 } from 'bun:test';
 import { type Extension } from 'vscode';
