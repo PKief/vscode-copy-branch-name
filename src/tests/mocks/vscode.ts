@@ -10,7 +10,26 @@ export const vscodeApiMock = {
   },
   window: {
     activeTextEditor: undefined,
+    activeTerminal: undefined,
     setStatusBarMessage: () => {},
+    showQuickPick: () => Promise.resolve(undefined),
+  },
+  workspace: {
+    workspaceFolders: undefined,
+    getWorkspaceFolder: () => undefined,
+  },
+  // biome-ignore lint/style/useNamingConvention: mock class
+  Uri: {
+    file: (path: string) => ({
+      scheme: 'file',
+      authority: '',
+      path: path,
+      query: '',
+      fragment: '',
+      fsPath: path,
+      with: () => ({}),
+      toJSON: () => ({}),
+    }),
   },
 
   // biome-ignore lint/style/useNamingConvention: mock enum

@@ -3,7 +3,7 @@ import { getGitRepository } from '../utils/git';
 import { showToastInStatusBar } from '../utils/statusbar';
 
 export const copyCurrentBranchNameCommand = async () => {
-  const repo = getGitRepository();
+  const repo = await getGitRepository();
   if (repo) {
     const branchName = (repo.state.HEAD && repo.state.HEAD.name) || '';
     try {

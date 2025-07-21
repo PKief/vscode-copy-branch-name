@@ -10,6 +10,7 @@ export type GitExtension = {
 };
 
 export type GitRepository = {
+  rootUri: Uri;
   state: {
     // biome-ignore lint/style/useNamingConvention: Given by the Git API
     HEAD: {

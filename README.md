@@ -34,4 +34,10 @@ If the name of the branch was successfully copied to the clipboard, a message te
 
 ## Multiple Repositories Support
 
-This extension also supports multiple repositories. It copies the branch name of the repository in which the currently opened and active file is located. This ensures that you always get the correct branch name depending on the repository of the active file.
+This extension also supports multiple repositories with intelligent branch detection:
+
+- **When a file is open**: The extension automatically copies the branch name from the repository containing the currently active file, ensuring you always get the correct branch name.
+
+- **When no file is active**: If multiple repositories are available in your workspace, the extension will show a quick selection dialog allowing you to choose which repository's branch name to copy. The dialog displays each repository with its workspace name and current branch (e.g., "ProjectName (main)") for easy identification.
+
+- **Single repository**: When only one repository is available, the extension automatically uses it without any prompts.

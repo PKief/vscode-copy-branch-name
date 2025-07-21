@@ -16,7 +16,7 @@ import * as statusBar from '../utils/statusbar';
 import { copyCurrentBranchNameCommand } from './copy-branch';
 
 describe('copyCurrentBranchNameCommand', () => {
-  let getGitRepositoryMock: Mock<() => GitRepository | null>;
+  let getGitRepositoryMock: Mock<() => Promise<GitRepository | null>>;
 
   beforeEach(async () => {
     getGitRepositoryMock = mock();
@@ -45,16 +45,15 @@ describe('copyCurrentBranchNameCommand', () => {
 
   it('should copy the current branch name to clipboard and show a toast message', async () => {
     const branchName = 'main';
-    getGitRepositoryMock = mock(
-      () =>
-        ({
-          state: {
-            // biome-ignore lint/style/useNamingConvention: Given by the Git API
-            HEAD: {
-              name: branchName,
-            },
+    getGitRepositoryMock = mock(() =>
+      Promise.resolve({
+        state: {
+          // biome-ignore lint/style/useNamingConvention: Given by the Git API
+          HEAD: {
+            name: branchName,
           },
-        }) as GitRepository
+        },
+      } as GitRepository)
     );
     spyOn(gitUtils, 'getGitRepository').mockImplementation(
       getGitRepositoryMock
@@ -71,16 +70,15 @@ describe('copyCurrentBranchNameCommand', () => {
 
   it('should show an error message if the branch name cannot be copied to clipboard', async () => {
     const branchName = 'main';
-    getGitRepositoryMock = mock(
-      () =>
-        ({
-          state: {
-            // biome-ignore lint/style/useNamingConvention: Given by the Git API
-            HEAD: {
-              name: branchName,
-            },
+    getGitRepositoryMock = mock(() =>
+      Promise.resolve({
+        state: {
+          // biome-ignore lint/style/useNamingConvention: Given by the Git API
+          HEAD: {
+            name: branchName,
           },
-        }) as GitRepository
+        },
+      } as GitRepository)
     );
     spyOn(gitUtils, 'getGitRepository').mockImplementation(
       getGitRepositoryMock
@@ -95,7 +93,7 @@ describe('copyCurrentBranchNameCommand', () => {
   });
 
   it('should show an error message if the repository is not found', async () => {
-    getGitRepositoryMock = mock(() => null);
+    getGitRepositoryMock = mock(() => Promise.resolve(null));
     spyOn(gitUtils, 'getGitRepository').mockImplementation(
       getGitRepositoryMock
     );
