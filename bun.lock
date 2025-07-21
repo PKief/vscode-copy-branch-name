@@ -4,18 +4,18 @@
     "": {
       "name": "copy-branch-name",
       "devDependencies": {
-        "@biomejs/biome": "latest",
-        "@commitlint/config-conventional": "latest",
-        "@types/glob": "latest",
-        "@types/vscode": "latest",
-        "bun-types": "latest",
-        "changelogen": "latest",
-        "commitlint": "latest",
-        "esbuild": "latest",
-        "glob": "latest",
-        "husky": "latest",
-        "ts-loader": "latest",
-        "typescript": "latest",
+        "@biomejs/biome": "^2.1.2",
+        "@commitlint/config-conventional": "^19.8.1",
+        "@types/glob": "^9.0.0",
+        "@types/vscode": "~1.69.0",
+        "bun-types": "^1.2.19",
+        "changelogen": "^0.6.2",
+        "commitlint": "^19.8.1",
+        "esbuild": "^0.25.8",
+        "glob": "^11.0.3",
+        "husky": "^9.1.7",
+        "ts-loader": "^9.5.2",
+        "typescript": "^5.8.3",
       },
     },
   },
@@ -162,7 +162,7 @@
 
     "@types/react": ["@types/react@19.1.8", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-AwAfQ2Wa5bCx9WP8nZL2uMZWod7J7/JSplxbTmBQ5ms6QpqNYm672H0Vu9ZVKVngQ+ii4R/byguVEUZQyeg44g=="],
 
-    "@types/vscode": ["@types/vscode@1.102.0", "", {}, "sha512-V9sFXmcXz03FtYTSUsYsu5K0Q9wH9w9V25slddcxrh5JgORD14LpnOA7ov0L9ALi+6HrTjskLJ/tY5zeRF3TFA=="],
+    "@types/vscode": ["@types/vscode@1.69.1", "", {}, "sha512-YZ77g3u9S9Xw3dwAgRgNAwnKNS3nPlhSu3XKOIYQzCcItUrZovfJUlf/29wjON2VZvHGuYQnhKuJUP15ccpVIQ=="],
 
     "@webassemblyjs/ast": ["@webassemblyjs/ast@1.14.1", "", { "dependencies": { "@webassemblyjs/helper-numbers": "1.13.2", "@webassemblyjs/helper-wasm-bytecode": "1.13.2" } }, "sha512-nuBEDgQfm1ccRp/8bCQrx1frohyufl4JlbMMZ4P1wpeOfDhF6FQkxZJ1b/e+PLwr6X1Nhw6OLme5usuBWYBvuQ=="],
 

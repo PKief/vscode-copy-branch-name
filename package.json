@@ -70,7 +70,7 @@
     "@biomejs/biome": "^2.1.2",
     "@commitlint/config-conventional": "^19.8.1",
     "@types/glob": "^9.0.0",
-    "@types/vscode": "^1.102.0",
+    "@types/vscode": "~1.69.0",
     "bun-types": "^1.2.19",
     "changelogen": "^0.6.2",
     "commitlint": "^19.8.1",
