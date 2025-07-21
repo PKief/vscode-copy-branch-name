@@ -1,4 +1,22 @@
 # Changelog
+## v1.2.0
+
+[compare changes](https://github.com/PKief/vscode-copy-branch-name/compare/v1.1.0...v1.2.0)
+
+### 🚀 Enhancements
+
+- Enhance multiple repository support with intelligent branch detection and user selection (Fixes #19) ([#19](https://github.com/PKief/vscode-copy-branch-name/issues/19))
+
+### 🏡 Chore
+
+- Update VSCode extension recommendations ([7cbbe3d](https://github.com/PKief/vscode-copy-branch-name/commit/7cbbe3d))
+- Update devDependencies to latest versions ([75df5b9](https://github.com/PKief/vscode-copy-branch-name/commit/75df5b9))
+- Add disable-extensions argument to launch configuration ([af8a0f4](https://github.com/PKief/vscode-copy-branch-name/commit/af8a0f4))
+
+### ❤️ Contributors
+
+- Philipp Kief ([@PKief](https://github.com/PKief))
+
 ## v1.1.0
 
 [compare changes](https://github.com/PKief/vscode-copy-branch-name/compare/v1.0.5...v1.1.0)
