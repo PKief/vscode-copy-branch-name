@@ -44,6 +44,6 @@ This extension also supports multiple repositories with intelligent branch detec
 
 - **When a file is open**: The extension automatically copies the branch name from the repository containing the currently active file, ensuring you always get the correct branch name.
 
-- **When no file is active**: If multiple repositories are available in your workspace, the extension will show a quick selection dialog allowing you to choose which repository's branch name to copy. The dialog displays each repository with its workspace name and current branch (e.g., "ProjectName (main)") for easy identification.
+- **When no repository matches the active file**: If multiple repositories are available, the extension shows a selection dialog with repository names, branches, and paths. This also applies when no file is active. Cancelling the dialog leaves your clipboard unchanged.
 
 - **Single repository**: When only one repository is available, the extension automatically uses it without any prompts.
