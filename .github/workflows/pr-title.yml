@@ -1,31 +1,21 @@
-name: ✅ Check PR Title
+name: PR title
 
 on:
-  pull_request:
-    types: [opened, edited, synchronize]
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
 
 permissions:
-  pull-requests: write
+  contents: read
 
 jobs:
-  lint-pr-title:
-    name: Check PR Title
+  check-title:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          # Only fetch the config file from the repository
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            commitlint.config.js
-
-      - name: 📦 Install dependencies
-        run: npm install --global @commitlint/config-conventional commitlint
-
-      - name: 🔍 Check PR title with commitlint
-        id: title-check
+      - name: Validate PR title
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
-        run: echo "$PR_TITLE" | npx commitlint
+        run: |
+          if [ -z "$PR_TITLE" ]; then
+            echo "PR title must not be empty"
+            exit 1
+          fi

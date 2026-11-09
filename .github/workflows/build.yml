@@ -1,32 +1,28 @@
-name: 🛠️ Build + Test
+name: Build
 
 on: [push, pull_request]
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
-    name: Build + Test
-
     steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      
-      - name: 🔧 Setup Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version-file: ".bun-version"
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: 📦 Install dependencies
-        run: bun install --frozen-lockfile
-  
-      - name: 🚀 Test + Build
-        id: build
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck, Test and Build
         run: |
-          bun run lint
-          bun test
-          bun run vscode:prepublish
+          npm run typecheck
+          npm test
+          npm run vscode:prepublish

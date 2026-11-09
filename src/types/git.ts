@@ -1,4 +1,4 @@
-import { Uri } from 'vscode';
+import type { Uri } from 'vscode';
 
 export type GitExtensionApi = {
   repositories: GitRepository[];
@@ -12,9 +12,6 @@ export type GitExtension = {
 export type GitRepository = {
   rootUri: Uri;
   state: {
-    // biome-ignore lint/style/useNamingConvention: Given by the Git API
-    HEAD: {
-      name: string;
-    };
+    HEAD: { name?: string } | undefined;
   };
 };

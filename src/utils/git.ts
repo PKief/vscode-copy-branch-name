@@ -1,4 +1,3 @@
-import * as path from 'path';
 import { extensions, window, workspace } from 'vscode';
 import type { GitExtension, GitRepository } from '../types/git';
 
@@ -8,64 +7,43 @@ interface RepositoryPickItem {
   repository: GitRepository;
 }
 
-export const getGitRepository = async (): Promise<GitRepository | null> => {
-  const gitExtension =
-    extensions.getExtension<GitExtension>('vscode.git')?.exports;
+const getRepositoryName = (uri: { path: string }): string =>
+  uri.path.split('/').filter(Boolean).pop() || 'Unknown Repository';
 
-  const extensionApi = gitExtension?.getAPI(1);
+// null means no repository is available; undefined means the picker was cancelled.
+export const getGitRepository = async (): Promise<GitRepository | null | undefined> => {
+  const gitExtension = extensions.getExtension<GitExtension>('vscode.git');
+  const extensionApi = (await gitExtension?.activate())?.getAPI(1);
+
   if (!extensionApi) {
     return null;
   }
 
-  // Strategy 1: Use active editor's repository (primary method)
   const activeEditor = window.activeTextEditor;
   if (activeEditor) {
-    const activeFilePath = activeEditor.document.uri;
-    const repo = extensionApi.getRepository(activeFilePath);
-    if (repo) {
-      return repo;
+    const repository = extensionApi.getRepository(activeEditor.document.uri);
+    if (repository) {
+      return repository;
     }
   }
 
-  // Strategy 2: If no active editor, check available repositories
-  const repositories = extensionApi.repositories.filter(
-    (repo) => repo.state.HEAD && repo.state.HEAD.name
-  );
-
+  const repositories = extensionApi.repositories;
+  if (repositories.length === 1) {
+    return repositories[0];
+  }
   if (repositories.length === 0) {
     return null;
   }
 
-  // If only one repository, use it directly
-  if (repositories.length === 1) {
-    return repositories[0];
-  }
-
-  // Multiple repositories - show picker
-  return await showRepositoryPicker(repositories);
-};
-
-const showRepositoryPicker = async (
-  repositories: GitRepository[]
-): Promise<GitRepository | null> => {
-  const items: RepositoryPickItem[] = repositories.map((repo) => {
-    const branchName = repo.state.HEAD?.name || 'unknown';
-    const workspaceFolder = workspace.getWorkspaceFolder(repo.rootUri);
-
-    let label: string;
-    if (workspaceFolder) {
-      label = `${workspaceFolder.name} (${branchName})`;
-    } else {
-      // Fallback to repository root folder name
-      const repoPath = repo.rootUri.fsPath;
-      const repoName = path.basename(repoPath) || 'Unknown Repository';
-      label = `${repoName} (${branchName})`;
-    }
+  const items: RepositoryPickItem[] = repositories.map((repository) => {
+    const branchName = repository.state.HEAD?.name || 'unknown';
+    const workspaceFolder = workspace.getWorkspaceFolder(repository.rootUri);
+    const repositoryName = getRepositoryName(repository.rootUri);
 
     return {
-      label,
-      description: repo.rootUri.fsPath,
-      repository: repo,
+      label: `${workspaceFolder?.name || repositoryName} (${branchName})`,
+      description: repository.rootUri.path,
+      repository,
     };
   });
 
@@ -74,5 +52,5 @@ const showRepositoryPicker = async (
     matchOnDescription: true,
   });
 
-  return selected?.repository || null;
+  return selected?.repository;
 };

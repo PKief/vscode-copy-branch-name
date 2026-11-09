@@ -1,3 +1,0 @@
-// Bun Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`getGitRepository should return null if no git extension is found 1`] = `[class Function]`;

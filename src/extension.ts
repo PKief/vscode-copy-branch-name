@@ -1,37 +1,13 @@
 import * as vscode from 'vscode';
-import { copyCurrentBranchNameCommand } from './commands';
-import { showStatusBarButton } from './utils/statusbar';
-
-const commands: { id: string; callback: () => void }[] = [
-  { id: 'copy-current', callback: copyCurrentBranchNameCommand },
-];
+import { copyCurrentBranchNameCommand } from './commands/copy-branch';
+import { showStatusBarButton, disposeStatusBarToast } from './utils/statusbar';
 
 export const activate = (context: vscode.ExtensionContext) => {
-  const extensionId = context.extension.packageJSON.name;
-  registerCommands(extensionId, context);
+  const command = `${context.extension.packageJSON.name}.copy-current`;
 
-  showStatusBarButton({
-    alignment: vscode.StatusBarAlignment.Left,
-    priority: 9999,
-    text: '$(copy)',
-    tooltip: 'Copy current branch name',
-    accessibilityInformation:
-      'Click this button to copy the current branch name',
-    command: `${extensionId}.copy-current`,
-    visible: true,
-  });
-};
-
-const registerCommands = (
-  extensionId: string,
-  context: vscode.ExtensionContext
-) => {
-  for (const command of commands) {
-    const disposable = vscode.commands.registerCommand(
-      `${extensionId}.${command.id}`,
-      command.callback
-    );
-
-    context.subscriptions.push(disposable);
-  }
+  context.subscriptions.push(
+    vscode.commands.registerCommand(command, copyCurrentBranchNameCommand),
+    showStatusBarButton(command),
+    new vscode.Disposable(disposeStatusBarToast)
+  );
 };

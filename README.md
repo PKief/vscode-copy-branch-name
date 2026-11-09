@@ -32,6 +32,12 @@ In addition, it's also possible to run the copy command via VS Code command pale
 
 If the name of the branch was successfully copied to the clipboard, a message text appears in the status bar for a few seconds.
 
+## Supported Environments
+
+Works in desktop VS Code and GitHub Codespaces, including Codespaces opened in a browser. The extension runs in the workspace extension host and requires VS Code's built-in Git extension.
+
+Standalone vscode.dev and github.dev are not supported.
+
 ## Multiple Repositories Support
 
 This extension also supports multiple repositories with intelligent branch detection:

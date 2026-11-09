@@ -2,23 +2,29 @@ import * as vscode from 'vscode';
 import { getGitRepository } from '../utils/git';
 import { showToastInStatusBar } from '../utils/statusbar';
 
-export const copyCurrentBranchNameCommand = async () => {
-  const repo = await getGitRepository();
-  if (repo) {
-    const branchName = (repo.state.HEAD && repo.state.HEAD.name) || '';
-    try {
-      await vscode.env.clipboard.writeText(branchName);
-      showToastInStatusBar(`$(save) "${branchName}" copied to clipboard`);
-    } catch (error) {
-      vscode.window.showErrorMessage(
-        'Could not write branch name to clipboard. Something went completely wrong 🙈. Please report the behavior as issue in the repository!'
-      );
-      throw error;
+export const copyCurrentBranchNameCommand = async (): Promise<void> => {
+  try {
+    const repository = await getGitRepository();
+    if (repository === undefined) {
+      return; // Repository selection was cancelled.
     }
-  } else {
-    const errorMessage =
-      'Could not find current branch name. The extension could not read the Git repository of the current workspace.';
-    vscode.window.showErrorMessage(errorMessage);
-    throw new Error(errorMessage);
+    if (repository === null) {
+      await vscode.window.showErrorMessage('No Git repository found in the current workspace.');
+      return;
+    }
+
+    const branchName = repository.state.HEAD?.name;
+    if (!branchName) {
+      await vscode.window.showInformationMessage(
+        'No branch name is available. The repository may have a detached HEAD.'
+      );
+      return;
+    }
+
+    await vscode.env.clipboard.writeText(branchName);
+    showToastInStatusBar(`$(save) "${branchName}" copied to clipboard`);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    await vscode.window.showErrorMessage(`Could not copy the branch name: ${message}`);
   }
 };

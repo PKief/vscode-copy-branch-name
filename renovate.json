@@ -4,14 +4,14 @@
   "ignoreDeps": ["@types/vscode"],
   "packageRules": [
     {
+      "matchManagers": ["npm"],
+      "groupName": "npm packages",
+      "groupSlug": "npm-packages"
+    },
+    {
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions workflows",
       "groupSlug": "github-actions"
-    },
-    {
-      "matchManagers": ["bun"],
-      "groupName": "Bun packages",
-      "groupSlug": "bun-packages"
     }
   ]
 }

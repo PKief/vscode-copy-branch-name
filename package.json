@@ -1,5 +1,6 @@
 {
   "name": "copy-branch-name",
+  "type": "module",
   "displayName": "Copy Branch Name",
   "description": "Extension to copy the current branch name",
   "publisher": "PKief",
@@ -40,44 +41,31 @@
     "onStartupFinished"
   ],
   "main": "./dist/extension.cjs",
+  "extensionKind": ["workspace"],
+  "extensionDependencies": ["vscode.git"],
   "contributes": {
     "commands": [
       {
         "command": "copy-branch-name.copy-current",
         "title": "Copy current branch name",
         "icon": "$(copy)",
-        "enablement": "gitOpenRepositoryCount >= 1",
         "shortTitle": "Copy current branch name"
       }
     ]
   },
-  "extensionDependencies": [
-    "vscode.git"
-  ],
   "scripts": {
-    "vscode:prepublish": "bun run build",
-    "prebuild": "tsc -p ./",
-    "build": "bun ./build/build-with-esbuild.ts",
-    "build:watch": "bun ./build/watch-with-esbuild.ts",
-    "test": "bun test",
-    "test:snapshot": "bun test --update-snapshots",
-    "test:debug": "bun test --inspect-wait",
-    "lint": "biome check ./src",
-    "format": "biome format --write ./src",
-    "prepare": "husky"
+    "vscode:prepublish": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "build": "esbuild src/extension.ts --bundle --minify --platform=node --target=node16 --format=cjs --external:vscode --outfile=dist/extension.cjs"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.2",
-    "@commitlint/config-conventional": "^20.0.0",
-    "@types/glob": "^9.0.0",
+    "@types/node": "^22.19.11",
     "@types/vscode": "~1.69.0",
-    "bun-types": "^1.2.19",
-    "changelogen": "^0.6.2",
-    "commitlint": "^20.0.0",
-    "esbuild": "^0.27.0",
-    "glob": "^13.0.0",
-    "husky": "^9.1.7",
-    "ts-loader": "^9.5.2",
-    "typescript": "^5.8.3"
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }

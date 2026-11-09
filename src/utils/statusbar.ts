@@ -1,47 +1,28 @@
 import * as vscode from 'vscode';
 
-let currentStatusBarMessageTimeout: Timer;
+let currentStatusBarMessage: vscode.Disposable | undefined;
 
-export type StatusBarButtonConfig = {
-  alignment: vscode.StatusBarAlignment;
-  priority: number;
-  text: string;
-  tooltip: string;
-  accessibilityInformation: string;
-  command: string;
-  visible: boolean;
-};
-
-/**
- * Show button in status bar
- */
-export const showStatusBarButton = (config: StatusBarButtonConfig) => {
-  const copyButton = vscode.window.createStatusBarItem(
-    config.alignment,
-    config.priority
+export const showStatusBarButton = (command: string): vscode.StatusBarItem => {
+  const button = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Left,
+    9999
   );
-  copyButton.text = config.text;
-  copyButton.tooltip = config.tooltip;
-  copyButton.accessibilityInformation = {
-    label: config.accessibilityInformation,
+  button.text = '$(copy)';
+  button.tooltip = 'Copy current branch name';
+  button.accessibilityInformation = {
+    label: 'Click this button to copy the current branch name',
   };
-  copyButton.command = config.command;
-  copyButton.show();
+  button.command = command;
+  button.show();
+  return button;
 };
 
-/**
- * Show a message in the status bar for a short time
- * @param message Message of the toast
- * @param milliseconds Time in milliseconds to show the toast
- */
+export const disposeStatusBarToast = () => {
+  currentStatusBarMessage?.dispose();
+  currentStatusBarMessage = undefined;
+};
+
 export const showToastInStatusBar = (message: string, milliseconds = 5000) => {
-  resetStatusBarToastTimeout();
-  vscode.window.setStatusBarMessage(message);
-  currentStatusBarMessageTimeout = setTimeout(() => {
-    vscode.window.setStatusBarMessage('');
-  }, milliseconds);
-};
-
-const resetStatusBarToastTimeout = () => {
-  clearTimeout(currentStatusBarMessageTimeout);
+  disposeStatusBarToast();
+  currentStatusBarMessage = vscode.window.setStatusBarMessage(message, milliseconds);
 };

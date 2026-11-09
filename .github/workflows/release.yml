@@ -1,4 +1,4 @@
-name: 🚀 Release + Publish
+name: Release and Publish
 
 on: [workflow_dispatch]
 
@@ -12,63 +12,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # Required for fetching tags and generating release notes
           fetch-depth: 0
 
-      - name: 🔧 Setup Bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          bun-version-file: ".bun-version"
+          node-version: 22
+          cache: npm
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Package extension
+        run: npx --yes @vscode/vsce package
+
+      - name: Get metadata
         run: |
-          bun install --frozen-lockfile
+          VERSION=$(node -p "require('./package.json').version")
+          EXTENSION_FILE=$(ls *.vsix)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "EXTENSION_FILE=$EXTENSION_FILE" >> $GITHUB_ENV
 
-      - name: 🔧 Configure Git
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git config --global push.followTags true
-
-      - name: 📜 Generate changelog and release notes
-        env:
-          # Don't run husky on `git commit`
-          HUSKY: 0
-        run: |
-          bunx changelogen --hideAuthorEmail --release --push
-          bunx changelogen github release --token ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 📝 Get metadata
-        run: |
-          VERSION=$(jq -r '.version' package.json)
-          NAME=$(jq -r '.name' package.json)
-
-          EXTENSION_FILE="${NAME}-${VERSION}.vsix"
-
-          echo "VERSION=$VERSION"                  >> $GITHUB_ENV
-          echo "EXTENSION_FILE=$EXTENSION_FILE"    >> $GITHUB_ENV
-
-      - name: 🛠️ Build extension
-        run: bunx @vscode/vsce package
-
-      - name: 🌐 Publish to Open VSX Registry
-        uses: HaaLeo/publish-vscode-extension@ca5561daa085dee804bf9f37fe0165785a9b14db # v2.0.0
+      - name: Publish to Open VSX Registry
+        uses: HaaLeo/publish-vscode-extension@1b8df468b849f76a143b8c18bf0ffa2075398d12 # v2.1.0
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
           extensionFile: ${{ env.EXTENSION_FILE }}
 
-      - name: 🌐 Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@ca5561daa085dee804bf9f37fe0165785a9b14db # v2.0.0
+      - name: Publish to Visual Studio Marketplace
+        uses: HaaLeo/publish-vscode-extension@1b8df468b849f76a143b8c18bf0ffa2075398d12 # v2.1.0
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
           extensionFile: ${{ env.EXTENSION_FILE }}
 
-      - name: ⬆️ Upload VSIX to GitHub release
-        run: |
-          gh release upload v$VERSION $EXTENSION_FILE
+      - name: Upload VSIX to GitHub release
+        run: gh release upload v$VERSION $EXTENSION_FILE
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
