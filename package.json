@@ -41,8 +41,12 @@
     "onStartupFinished"
   ],
   "main": "./dist/extension.cjs",
-  "extensionKind": ["workspace"],
-  "extensionDependencies": ["vscode.git"],
+  "extensionKind": [
+    "workspace"
+  ],
+  "extensionDependencies": [
+    "vscode.git"
+  ],
   "contributes": {
     "commands": [
       {
@@ -62,6 +66,7 @@
   "devDependencies": {
     "@types/node": "^22.19.11",
     "@types/vscode": "~1.69.0",
+    "changelog-machine": "^2.1.0",
     "esbuild": "^0.28.2",
     "typescript": "^7.0.2"
   },

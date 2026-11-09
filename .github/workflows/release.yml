@@ -2,10 +2,11 @@ name: Release and Publish
 
 on: [workflow_dispatch]
 
+concurrency:
+  group: release
+
 permissions:
-  id-token: write
   contents: write
-  attestations: write
 
 jobs:
   release:
@@ -15,41 +16,64 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install and validate
+        run: |
+          npm ci
+          npm run typecheck
+          npm test
+          npm run build
+
+      - name: Bump version and generate changelog
+        id: release
+        run: |
+          previous=$(node -p "require('./package.json').version")
+          npx --no-install changelog-machine --bump
+          version=$(node -p "require('./package.json').version")
+          if [[ "$version" == "$previous" ]]; then exit 0; fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          echo "EXTENSION_FILE=copy-branch-name-$version.vsix" >> "$GITHUB_ENV"
 
       - name: Package extension
-        run: npx --yes @vscode/vsce package
+        if: steps.release.outputs.changed == 'true'
+        run: npx --yes @vscode/vsce package --out "$EXTENSION_FILE"
 
-      - name: Get metadata
+      - name: Commit and tag release
+        if: steps.release.outputs.changed == 'true'
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          EXTENSION_FILE=$(ls *.vsix)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "EXTENSION_FILE=$EXTENSION_FILE" >> $GITHUB_ENV
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json CHANGELOG.md
+          git commit -m "chore(release): v$VERSION"
+          git tag "v$VERSION"
+          git push --atomic origin HEAD:refs/heads/main "refs/tags/v$VERSION"
 
       - name: Publish to Open VSX Registry
+        if: steps.release.outputs.changed == 'true'
         uses: HaaLeo/publish-vscode-extension@1b8df468b849f76a143b8c18bf0ffa2075398d12 # v2.1.0
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
           extensionFile: ${{ env.EXTENSION_FILE }}
 
       - name: Publish to Visual Studio Marketplace
+        if: steps.release.outputs.changed == 'true'
         uses: HaaLeo/publish-vscode-extension@1b8df468b849f76a143b8c18bf0ffa2075398d12 # v2.1.0
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
           extensionFile: ${{ env.EXTENSION_FILE }}
 
-      - name: Upload VSIX to GitHub release
-        run: gh release upload v$VERSION $EXTENSION_FILE
+      - name: Create GitHub release with VSIX
+        if: steps.release.outputs.changed == 'true'
+        run: gh release create "v$VERSION" "$EXTENSION_FILE" --verify-tag --title "Copy Branch Name v$VERSION" --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
