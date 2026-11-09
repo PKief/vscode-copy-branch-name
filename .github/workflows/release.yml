@@ -4,9 +4,11 @@ on: [workflow_dispatch]
 
 concurrency:
   group: release
+  cancel-in-progress: false
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   release:
@@ -34,9 +36,11 @@ jobs:
 
       - name: Bump version and generate changelog
         id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           previous=$(node -p "require('./package.json').version")
-          npx --no-install changelog-machine --bump
+          npx --no-install changelog-machine --bump --resolve-contributors
           version=$(node -p "require('./package.json').version")
           if [[ "$version" == "$previous" ]]; then exit 0; fi
           echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -54,7 +58,7 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add package.json package-lock.json CHANGELOG.md
           git commit -m "chore(release): v$VERSION"
-          git tag "v$VERSION"
+          git tag -a "v$VERSION" -m "v$VERSION"
           git push --atomic origin HEAD:refs/heads/main "refs/tags/v$VERSION"
 
       - name: Publish to Open VSX Registry
@@ -66,11 +70,7 @@ jobs:
 
       - name: Publish to Visual Studio Marketplace
         if: steps.release.outputs.changed == 'true'
-        uses: HaaLeo/publish-vscode-extension@1b8df468b849f76a143b8c18bf0ffa2075398d12 # v2.1.0
-        with:
-          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-          registryUrl: https://marketplace.visualstudio.com
-          extensionFile: ${{ env.EXTENSION_FILE }}
+        run: npx --yes @vscode/vsce publish --oidc --packagePath "$EXTENSION_FILE"
 
       - name: Create GitHub release with VSIX
         if: steps.release.outputs.changed == 'true'
