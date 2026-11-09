@@ -9,7 +9,7 @@
     "email": "philipp.kief@gmx.de",
     "url": "https://pkief.com"
   },
-  "version": "1.2.0",
+  "version": "1.2.1",
   "engines": {
     "vscode": "^1.69.0"
   },
